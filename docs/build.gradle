@@ -1,0 +1,69 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath 'io.spring.gradle.antora:spring-antora-plugin:0.0.1'
+        classpath 'org.antora:gradle-antora-plugin:1.0.0'
+        classpath("org.asciidoctor:asciidoctor-gradle-jvm-pdf:4.0.2")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.antora'
+apply plugin: 'io.spring.antora.generate-antora-yml'
+apply plugin: 'org.asciidoctor.jvm.pdf'
+
+description = 'My Component Doc'
+
+antora {
+    version = '3.2.0-alpha.4'
+    playbook = 'antora-playbook.yml'
+    options = ['--clean', '--stacktrace']
+
+    dependencies = [
+            '@antora/atlas-extension'         : '1.0.0-alpha.1',
+            '@antora/pdf-extension'           : '1.0.0-alpha.7',
+            '@antora/collector-extension'     : '1.0.0-alpha.3',
+            '@asciidoctor/tabs'               : '1.0.0-beta.6',
+            '@springio/antora-extensions'     : '1.8.2',
+            '@springio/asciidoctor-extensions': '1.0.0-alpha.9',
+    ]
+}
+
+tasks.named('generateAntoraYml') {
+    asciidocAttributes = project.provider {
+        return ['project-version': project.version.toString()]
+    }
+}
+
+tasks.create('generateAntoraResources') {
+    dependsOn 'generateAntoraYml'
+}
+
+tasks.named('antora') {
+    dependsOn 'generateAntoraResources', 'test'
+}
+
+jar {
+    enabled = false
+}
+
+javadoc {
+    enabled = false
+}
+
+tasks.withType(AbstractPublishToMaven).configureEach {
+    enabled = false
+}
+
+// Apply a specific Java toolchain to ease working on different environments.
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+build.dependsOn(':docs:antora')

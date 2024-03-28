@@ -1,0 +1,5 @@
+:noheader:
+[[my-component-documentation]]
+= My Component Documentation
+
+Docs for my-component
