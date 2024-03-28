@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+repositories { //needed at root for asciidoctor and nohttp-checkstyle
+    mavenCentral()
+}
+
+group 'org.example'
+version project.property('version')
+
+repositories {
+    mavenCentral()
+}
+
