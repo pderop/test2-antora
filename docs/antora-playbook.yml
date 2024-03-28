@@ -11,7 +11,7 @@ antora:
       root_component_name: 'my-component'
 site:
   title: My Component
-  url: https://pderop.github.io/test-antora/
+  url: https://pderop.github.io/test2-antora/
   #start_page: my-component::inline-text-formatting.adoc
 content:
   sources:
